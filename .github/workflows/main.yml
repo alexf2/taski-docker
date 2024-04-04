@@ -89,3 +89,4 @@ jobs:
           # на сервере и в docker-compose.yml не указывать версию
           tags: ${{ secrets.DOCKER_USERNAME }}/taski_backend:latest 
   
+  
