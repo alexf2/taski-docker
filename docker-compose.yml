@@ -4,6 +4,10 @@ volumes:
   pg_data:
   static:
 
+networks:
+  common_ydx_network:
+    name: common_ydx_network
+
 # Перечень контейнеров
 services:
   # Имя и описание первого контейнера; имя выбирает разработчик. 
@@ -16,6 +20,15 @@ services:
     # Какой volume подключить для этого контейнера
     volumes:
       - pg_data:/var/lib/postgresql/data
+    networks:
+      common_ydx_network:
+    expose:
+      - "5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 1s
+      timeout: 1s
+      retries: 60
 
   # Имя и описание контейнера с бэкендом
   backend:
@@ -25,9 +38,12 @@ services:
      # Тут подключаем volume к backend
     volumes:
       - static:/backend_static
-    # Какие контейнеры нужно запустить до старта этого контейнера:
+    # Какие контейнеры нужно запустить до старта этого контейнера:    
+    networks:
+      common_ydx_network:
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   # Имя третьего контейнера. Это контейнер с фронтендом
   frontend:
@@ -36,6 +52,8 @@ services:
     command: cp -r /app/build/. /frontend_static/
     volumes:
       - static:/frontend_static
+    networks:
+      common_ydx_network:
 
   gateway:
     # Сбилдить и запустить образ, 
@@ -49,3 +67,7 @@ services:
     # на порт 80 контейнера.
     ports:
       - 8000:80 
+        # порт_хоста:порт_контейнера
+    networks:
+      common_ydx_network:
+
