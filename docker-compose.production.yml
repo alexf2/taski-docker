@@ -44,6 +44,8 @@ services:
     command: cp -r /app/build/. /frontend_static/
     volumes:
       - static_volume:/frontend_static
+    networks:
+      common_ydx_network:
 
   gateway:
     image: alexf2/taski_gateway:latest  # Качаем с Docker Hub
@@ -53,6 +55,8 @@ services:
     ports:
       - 8000:80 
         # порт_хоста:порт_контейнера
+    networks:
+      common_ydx_network:
 
 # Запускать: docker compose -f docker-compose.production.yml up 
 
