@@ -23,10 +23,7 @@ RUN pip install -r requirements.txt --no-cache-dir
 # в текущую рабочую директорию образа — /app.
 COPY . .
 
-RUN --mount=type=secret,id=SECRET_KEY export SECRET_KEY=$(cat /run/secrets/SECRET_KEY) 
-
-# RUN python3 manage.py migrate
-# docker exec taski_backend_container python manage.py migrate
+# RUN --mount=type=secret,id=SECRET_KEY export SECRET_KEY=$(cat /run/secrets/SECRET_KEY) 
 
 # При старте контейнера запустить сервер разработки.
 # CMD ["python", "manage.py", "runserver", "0:8000"] 

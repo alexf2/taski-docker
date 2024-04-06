@@ -21,11 +21,9 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data
     networks:
-      common_ydx_network:
-    expose:
-      - "5432"
+      common_ydx_network:    
     healthcheck:
-      test: ["CMD", "pg_isready", "-d", "django", "-U", "django_user"]
+      test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB}", "-U", "${POSTGRES_USER}"]
       interval: 1s
       timeout: 1s
       retries: 60
@@ -49,11 +47,13 @@ services:
   frontend:
     env_file: .env
     build: ./frontend/ 
+    # контейнер фронта завершается после создания так как не имеет команды,
+    # поэтому, копируем здесь, а не в пайплайне
     command: cp -r /app/build/. /frontend_static/
     volumes:
       - static:/frontend_static
     networks:
-      common_ydx_network:
+      common_ydx_network:    
 
   gateway:
     # Сбилдить и запустить образ, 
@@ -66,8 +66,10 @@ services:
     # перенаправление всех запросов с порта 8000 хоста
     # на порт 80 контейнера.
     ports:
-      - 8000:80 
+      - "8000:80"
         # порт_хоста:порт_контейнера
     networks:
       common_ydx_network:
+    depends_on:
+      - backend
 
