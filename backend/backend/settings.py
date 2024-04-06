@@ -8,8 +8,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost',
-                 'afyandex.webhop.me', 'afyandex.name']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'afyandex.webhop.me']
 
 
 # Application definition
