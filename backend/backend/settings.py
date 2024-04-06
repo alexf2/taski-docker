@@ -6,9 +6,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ['SECRET_KEY']
 
-DEBUG = False
+DEBUG = bool(os.getenv('DEBUG', True))
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'afyandex.webhop.me']
+ALLOWED_HOSTS = [host.strip() for host in os.getenv(
+    'ALLOWED_HOSTS', '127.0.0.1, localhost').split(',')]
 
 
 # Application definition
